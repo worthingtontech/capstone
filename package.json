@@ -1,23 +1,24 @@
 {
-  "name": "d2c-food-platform-infra",
+  "name": "d2c-food-platform",
   "version": "0.1.0",
-  "bin": {
-    "d2c-platform": "bin/d2c-platform.ts"
-  },
+  "private": true,
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc -w",
-    "cdk": "cdk"
+    "build": "pnpm -r build",
+    "lint": "eslint .",
+    "test": "pnpm -r test",
+    "cdk": "pnpm --filter @d2c-platform/infra cdk"
   },
   "devDependencies": {
-    "@types/node": "20.11.30",
-    "aws-cdk": "2.128.0",
-    "ts-node": "10.9.2",
-    "typescript": "5.3.3"
+    "@eslint/js": "^9.39.2",
+    "@typescript-eslint/eslint-plugin": "^8.53.1",
+    "@typescript-eslint/parser": "^8.53.1",
+    "eslint": "^9.39.2",
+    "typescript": "5.3.3",
+    "typescript-eslint": "^8.53.1"
   },
-  "dependencies": {
-    "aws-cdk-lib": "2.128.0",
-    "constructs": "10.3.0",
-    "source-map-support": "0.5.21"
-  }
+  "engines": {
+    "node": ">=18",
+    "pnpm": ">=8"
+  },
+  "packageManager": "pnpm@9.15.0"
 }

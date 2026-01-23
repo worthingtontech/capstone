@@ -2,9 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "CommonJS",
-    "lib": [
-      "ES2022"
-    ],
+    "lib": ["ES2022"],
     "strict": true,
     "declaration": false,
     "noImplicitAny": true,
@@ -12,7 +10,7 @@
     "noImplicitThis": true,
     "alwaysStrict": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": false,
+    "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
@@ -20,13 +18,12 @@
     "inlineSourceMap": true,
     "inlineSources": true,
     "experimentalDecorators": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "outDir": "dist"
+    "typeRoots": ["./node_modules/@types", "../node_modules/@types"],
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
   },
-  "include": [
-    "bin/**/*.ts",
-    "lib/**/*.ts"
-  ]
+  "include": ["bin/**/*.ts", "src/**/*.ts"]
 }
