@@ -19,8 +19,9 @@ export class Frontend extends Construct {
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       encryption: BucketEncryption.S3_MANAGED,
       enforceSSL: true,
-      versioned: true,
-      removalPolicy: RemovalPolicy.RETAIN,
+      versioned: false,
+      autoDeleteObjects: true,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
 
     this.distribution = new Distribution(this, 'FrontendDistribution', {

@@ -46,8 +46,8 @@ export class Database extends Construct {
       sortKey: { name: 'preferenceType', type: AttributeType.STRING },
       billingMode: BillingMode.PAY_PER_REQUEST,
       encryption: TableEncryption.AWS_MANAGED,
-      pointInTimeRecovery: true,
-      removalPolicy: RemovalPolicy.RETAIN,
+      pointInTimeRecovery: false,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 
@@ -57,9 +57,9 @@ export class Database extends Construct {
       sortKey: { name: 'eventTimestamp', type: AttributeType.STRING },
       billingMode: BillingMode.PAY_PER_REQUEST,
       encryption: TableEncryption.AWS_MANAGED,
-      pointInTimeRecovery: true,
+      pointInTimeRecovery: false,
       timeToLiveAttribute: 'expiresAt',
-      removalPolicy: RemovalPolicy.RETAIN,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 
@@ -83,12 +83,12 @@ export class Database extends Construct {
       maxAllocatedStorage: 200,
       storageEncrypted: true,
       iamAuthentication: true,
-      backupRetention: Duration.days(7),
-      deletionProtection: true,
+      backupRetention: Duration.days(0),
+      deletionProtection: false,
       publiclyAccessible: false,
       parameterGroup,
       securityGroups: [securityGroup],
-      removalPolicy: RemovalPolicy.RETAIN,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 }
