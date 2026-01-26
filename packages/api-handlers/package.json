@@ -12,8 +12,8 @@
     "@d2c-platform/shared": "workspace:*"
   },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.160",
-    "@types/node": "^25.0.10",
-    "typescript": "5.3.3"
+    "@types/aws-lambda": "8.10.160",
+    "@types/node": "25.0.10",
+    "typescript": "5.9.3"
   }
 }

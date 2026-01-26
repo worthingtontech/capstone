@@ -4,8 +4,8 @@ import { Construct } from 'constructs';
 import { Api, Auth, Database, Frontend, Networking, Search, Vpn, Waf } from '../constructs';
 
 export class D2cPlatformStack extends Stack {
-  public readonly frontendBucketNameOutput!: CfnOutput;
-  public readonly frontendDistributionIdOutput!: CfnOutput;
+  public readonly frontendBucketNameOutput: CfnOutput;
+  public readonly frontendDistributionIdOutput: CfnOutput;
 
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -48,7 +48,9 @@ export class D2cPlatformStack extends Stack {
 
     new Vpn(this, 'Vpn', { vpc: networking.vpc });
 
-    this.createOutputs(frontend, api, auth, database);
+    const outputs = this.createOutputs(frontend, api, auth, database);
+    this.frontendBucketNameOutput = outputs.frontendBucketNameOutput;
+    this.frontendDistributionIdOutput = outputs.frontendDistributionIdOutput;
   }
 
   private configureSecurityGroupRules(networking: Networking): void {
@@ -65,16 +67,19 @@ export class D2cPlatformStack extends Stack {
     );
   }
 
-  private createOutputs(frontend: Frontend, api: Api, auth: Auth, database: Database): void {
+  private createOutputs(frontend: Frontend, api: Api, auth: Auth, database: Database): {
+    frontendBucketNameOutput: CfnOutput;
+    frontendDistributionIdOutput: CfnOutput;
+  } {
     new CfnOutput(this, 'FrontendUrl', {
       value: `https://${frontend.distribution.domainName}`,
     });
 
-    this.frontendBucketNameOutput = new CfnOutput(this, 'FrontendBucketName', {
+    const frontendBucketNameOutput = new CfnOutput(this, 'FrontendBucketName', {
       value: frontend.bucket.bucketName,
     });
 
-    this.frontendDistributionIdOutput = new CfnOutput(this, 'FrontendDistributionId', {
+    const frontendDistributionIdOutput = new CfnOutput(this, 'FrontendDistributionId', {
       value: frontend.distribution.distributionId,
     });
 
@@ -93,5 +98,7 @@ export class D2cPlatformStack extends Stack {
     new CfnOutput(this, 'InventoryDbSecretArn', {
       value: database.inventoryDb.secret?.secretArn ?? 'NotCreated',
     });
+
+    return { frontendBucketNameOutput, frontendDistributionIdOutput };
   }
 }

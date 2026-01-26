@@ -4,7 +4,6 @@ import {
   CodePipeline,
   CodePipelineSource,
   ShellStep,
-  StackOutput,
 } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
 import { D2cPlatformStage } from '../stages';
@@ -59,14 +58,14 @@ export class D2cPlatformPipelineStack extends Stack {
       },
     });
 
-    const deployStage = pipeline.addStage(
-      new D2cPlatformStage(this, 'Production', {
-        env: {
-          account: Stack.of(this).account,
-          region: Stack.of(this).region,
-        },
-      }),
-    );
+    const prodStage = new D2cPlatformStage(this, 'Production', {
+      env: {
+        account: Stack.of(this).account,
+        region: Stack.of(this).region,
+      },
+    });
+
+    const deployStage = pipeline.addStage(prodStage);
 
     deployStage.addPost(
       new ShellStep('DeployFrontend', {
@@ -79,12 +78,8 @@ export class D2cPlatformPipelineStack extends Stack {
           'aws cloudfront create-invalidation --distribution-id $FRONTEND_DISTRIBUTION_ID --paths "/*"',
         ],
         envFromCfnOutputs: {
-          FRONTEND_BUCKET: StackOutput.fromCfnOutput(
-            deployStage.platformStack.frontendBucketNameOutput,
-          ),
-          FRONTEND_DISTRIBUTION_ID: StackOutput.fromCfnOutput(
-            deployStage.platformStack.frontendDistributionIdOutput,
-          ),
+          FRONTEND_BUCKET: prodStage.platformStack.frontendBucketNameOutput,
+          FRONTEND_DISTRIBUTION_ID: prodStage.platformStack.frontendDistributionIdOutput,
         },
       }),
     );

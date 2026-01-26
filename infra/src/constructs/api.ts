@@ -56,7 +56,7 @@ export class Api extends Construct {
     return new NodejsFunction(this, 'ProductsHandler', {
       entry: join(__dirname, '../../../packages/api-handlers/src/products/index.ts'),
       handler: 'productsHandler',
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_22_X,
       bundling: {
         minify: true,
         sourceMap: false,
@@ -84,7 +84,7 @@ export class Api extends Construct {
     return new NodejsFunction(this, 'HealthHandler', {
       entry: join(__dirname, '../../../packages/api-handlers/src/health/index.ts'),
       handler: 'healthHandler',
-      runtime: Runtime.NODEJS_20_X,
+      runtime: Runtime.NODEJS_22_X,
       bundling: {
         minify: true,
         sourceMap: false,

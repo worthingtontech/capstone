@@ -1,6 +1,6 @@
 import './App.css';
 
-function App() {
+function App(): React.JSX.Element {
   return (
     <div className="app">
       <header className="hero">

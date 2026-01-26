@@ -9,7 +9,7 @@
     "test": "node -e \"console.log('No tests for shared')\""
   },
   "devDependencies": {
-    "@types/node": "^25.0.10",
-    "typescript": "5.3.3"
+    "@types/node": "25.0.10",
+    "typescript": "5.9.3"
   }
 }

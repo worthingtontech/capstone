@@ -36,7 +36,7 @@ export class Search extends Construct {
         slowIndexLogEnabled: true,
         slowSearchLogEnabled: true,
       },
-      removalPolicy: RemovalPolicy.RETAIN,
+      removalPolicy: RemovalPolicy.DESTROY,
     });
   }
 }
