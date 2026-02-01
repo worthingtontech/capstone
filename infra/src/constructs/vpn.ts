@@ -23,6 +23,7 @@ export class Vpn extends Construct {
     const customerGatewayIp = new CfnParameter(this, 'CustomerGatewayIp', {
       type: 'String',
       description: 'Public IP of the on-premises VPN device.',
+      default: '203.0.113.1',
     });
     const customerGatewayAsn = new CfnParameter(this, 'CustomerGatewayAsn', {
       type: 'Number',
@@ -34,6 +35,7 @@ export class Vpn extends Construct {
     const onPremCidr = new CfnParameter(this, 'OnPremCidr', {
       type: 'String',
       description: 'On-premises CIDR range to route through the VPN (e.g. 10.10.0.0/16).',
+      default: '10.10.0.0/16',
     });
 
     const vpnGateway = new CfnVPNGateway(this, 'VpnGateway', {
