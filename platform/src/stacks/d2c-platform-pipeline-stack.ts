@@ -1,6 +1,5 @@
-import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { Stack, StackProps } from 'aws-cdk-lib';
 import { LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
-import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import {
   CodePipeline,
   CodePipelineSource,
@@ -14,7 +13,7 @@ export class D2cPlatformPipelineStack extends Stack {
     super(scope, id, props);
 
     const connectionArn = 'arn:aws:codeconnections:us-east-1:963692744767:connection/4edd5f27-c166-4eb3-8e59-2f5f90442032';
-    const repoOwner = this.node.tryGetContext('githubOwner') || 'worthingtontech';
+    const repoOwner = this.node.tryGetContext('githubOwner') || 'Cloudmancermedia';
     const repoName = this.node.tryGetContext('githubRepo') || 'capstone';
     const repoBranch = this.node.tryGetContext('githubBranch') || 'main';
 
@@ -24,23 +23,18 @@ export class D2cPlatformPipelineStack extends Stack {
       { connectionArn },
     );
 
-    const artifactBucket = new Bucket(this, 'PipelineArtifactsBucket', {
-      blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      encryption: BucketEncryption.S3_MANAGED,
-      enforceSSL: true,
-      autoDeleteObjects: true,
-      removalPolicy: RemovalPolicy.DESTROY,
-    });
-
     const pipeline = new CodePipeline(this, 'Pipeline', {
       pipelineName: 'D2cPlatformPipeline',
-      artifactBucket,
+      crossAccountKeys: true,
       synth: new ShellStep('Synth', {
         input: source,
         commands: [
+          'n 24',
+          'node --version',
           'corepack enable',
           'corepack prepare pnpm@9.15.0 --activate',
           'if [ -f pnpm-lock.yaml ]; then pnpm install --frozen-lockfile; else pnpm install; fi',
+          'pnpm --filter @d2c-platform/infra build',
           'pnpm -r build',
           'pnpm -r test',
           'pnpm --filter @d2c-platform/platform cdk synth',
