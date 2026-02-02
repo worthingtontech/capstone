@@ -1,4 +1,4 @@
-import { CfnParameter, RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
 import { LinuxBuildImage } from 'aws-cdk-lib/aws-codebuild';
 import { BlockPublicAccess, Bucket, BucketEncryption } from 'aws-cdk-lib/aws-s3';
 import {
@@ -7,24 +7,21 @@ import {
   ShellStep,
 } from 'aws-cdk-lib/pipelines';
 import { Construct } from 'constructs';
+import { D2cPlatformStage } from '../stages';
 
 export class D2cPlatformPipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const connectionArn = new CfnParameter(this, 'CodeStarConnectionArn', {
-      type: 'String',
-      description: 'CodeStar connection ARN for GitHub.',
-    });
-
-    const repoOwner = this.node.tryGetContext('githubOwner') || 'Cloudmancermedia';
+    const connectionArn = 'arn:aws:codeconnections:us-east-1:963692744767:connection/4edd5f27-c166-4eb3-8e59-2f5f90442032';
+    const repoOwner = this.node.tryGetContext('githubOwner') || 'worthingtontech';
     const repoName = this.node.tryGetContext('githubRepo') || 'capstone';
     const repoBranch = this.node.tryGetContext('githubBranch') || 'main';
 
     const source = CodePipelineSource.connection(
       `${repoOwner}/${repoName}`,
       repoBranch,
-      { connectionArn: connectionArn.valueAsString },
+      { connectionArn },
     );
 
     const artifactBucket = new Bucket(this, 'PipelineArtifactsBucket', {
@@ -35,7 +32,7 @@ export class D2cPlatformPipelineStack extends Stack {
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    new CodePipeline(this, 'Pipeline', {
+    const pipeline = new CodePipeline(this, 'Pipeline', {
       pipelineName: 'D2cPlatformPipeline',
       artifactBucket,
       synth: new ShellStep('Synth', {
@@ -56,6 +53,15 @@ export class D2cPlatformPipelineStack extends Stack {
       },
     });
 
-    // TODO: Add deployment stages when CodeStar connection is configured
+    // Dev stage - deploys automatically on push to main
+    pipeline.addStage(
+      new D2cPlatformStage(this, 'Dev', {
+        env: {
+          account: '963692744767',
+          region: 'us-east-1',
+        },
+        stackName: 'D2cPlatformDevStack',
+      }),
+    );
   }
 }
