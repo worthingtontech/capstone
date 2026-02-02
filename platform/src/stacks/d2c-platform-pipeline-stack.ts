@@ -39,6 +39,7 @@ export class D2cPlatformPipelineStack extends Stack {
           'pnpm -r test',
           'pnpm --filter @d2c-platform/platform cdk synth',
         ],
+        primaryOutputDirectory: 'platform/cdk.out',
       }),
       codeBuildDefaults: {
         buildEnvironment: {
