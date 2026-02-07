@@ -37,7 +37,7 @@ export class DevApi extends Construct {
 
   private createProductsHandler(props: DevApiProps): NodejsFunction {
     return new NodejsFunction(this, 'ProductsHandler', {
-      entry: join(__dirname, '../../../packages/api-handlers/src/products/index.ts'),
+      entry: join(__dirname, '../../../../packages/api-handlers/src/products/index.ts'),
       handler: 'productsHandler',
       runtime: Runtime.NODEJS_22_X,
       bundling: {
@@ -58,7 +58,7 @@ export class DevApi extends Construct {
 
   private createHealthHandler(): NodejsFunction {
     return new NodejsFunction(this, 'HealthHandler', {
-      entry: join(__dirname, '../../../packages/api-handlers/src/health/index.ts'),
+      entry: join(__dirname, '../../../../packages/api-handlers/src/health/index.ts'),
       handler: 'healthHandler',
       runtime: Runtime.NODEJS_22_X,
       bundling: {

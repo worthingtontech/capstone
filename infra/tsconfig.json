@@ -16,7 +16,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "typeRoots": ["./node_modules/@types", "../../node_modules/@types"],
-    "rootDir": "src",
+    "rootDir": ".",
     "outDir": "dist"
   },
   "include": ["src/**/*.ts"]
